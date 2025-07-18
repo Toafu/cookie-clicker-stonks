@@ -38,6 +38,11 @@ const highlightProfits = () => {
 	});
 };
 
+const updateStonks = () => {
+	highlightLowPrices();
+	highlightProfits();
+}
+
 const BUYBUYBUY = 20.00;
 const stonkIDs = [...Array(18).keys()];
 const game = Game.Objects['Bank'].minigame;
@@ -45,8 +50,7 @@ const brokers = game.brokers;
 const overhead = calculateOverhead(brokers);
 const stocks = Game.Objects['Bank'].minigame.goodsById;
 
-highlightLowPrices();
-highlightProfits();
+updateStonks();
 
 const nextTick = document.getElementById("bankNextTick");
 const observer = new MutationObserver(mutationList => {
@@ -54,10 +58,13 @@ const observer = new MutationObserver(mutationList => {
 		if (mutation.type === 'childList') {
 			const nextTickSplit = nextTick.innerHTML.split(" ");
 			if (nextTickSplit.at(-2) === "1" && nextTickSplit.at(-1) === "minute.") {
-				highlightLowPrices();
-				highlightProfits();
+				updateStonks();
 			}
 		}
 	}
 });
 observer.observe(nextTick, { childList: true });
+
+onfocus = (() => {
+	updateStonks();
+});
